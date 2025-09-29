@@ -14,6 +14,9 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             overflow: hidden;
+            -webkit-user-select: none;
+            user-select: none;
+            touch-action: manipulation;
         }
 
         .chat-bubble {
@@ -35,6 +38,8 @@
                         inset 0 1px 0 rgba(255, 255, 255, 0.1);
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             z-index: 999999;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
         }
 
         .chat-bubble::before {
@@ -61,6 +66,10 @@
                         0 0 80px rgba(212, 175, 55, 0.4);
         }
 
+        .chat-bubble:active {
+            transform: scale(1.05);
+        }
+
         .chat-bubble-icon {
             width: 28px;
             height: 28px;
@@ -68,6 +77,7 @@
             filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
             position: relative;
             z-index: 1;
+            pointer-events: none;
         }
 
         .chat-window {
@@ -179,11 +189,17 @@
             align-items: center;
             justify-content: center;
             transition: all 0.3s;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
         }
 
         .close-btn:hover {
             background: linear-gradient(135deg, rgba(212, 175, 55, 0.25), rgba(212, 175, 55, 0.15));
             transform: rotate(90deg);
+        }
+
+        .close-btn:active {
+            transform: rotate(90deg) scale(0.95);
         }
 
         .chat-messages {
@@ -252,6 +268,8 @@
             word-wrap: break-word;
             line-height: 1.4;
             font-size: 13px;
+            -webkit-user-select: text;
+            user-select: text;
         }
 
         @keyframes messageSlide {
@@ -351,6 +369,8 @@
             outline: none;
             background: linear-gradient(135deg, rgba(26, 11, 46, 0.6), rgba(26, 11, 46, 0.8));
             color: white;
+            -webkit-user-select: text;
+            user-select: text;
         }
 
         .chat-input::placeholder {
@@ -374,11 +394,17 @@
             text-transform: uppercase;
             letter-spacing: 0.5px;
             white-space: nowrap;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
         }
 
         .send-btn:hover {
             transform: translateY(-1px);
             box-shadow: 0 4px 15px rgba(212, 175, 55, 0.5);
+        }
+
+        .send-btn:active {
+            transform: translateY(0);
         }
 
         .send-btn:disabled {
@@ -510,12 +536,35 @@
         const chatMessages = document.getElementById('chatMessages');
         const typingWrapper = document.getElementById('typingWrapper');
 
-        chatBubble.addEventListener('click', () => {
-            chatWindow.classList.add('active');
-            userInput.focus();
+        // Prevent default touch behavior on interactive elements
+        [chatBubble, closeBtn, sendBtn].forEach(el => {
+            el.addEventListener('touchstart', (e) => {
+                e.stopPropagation();
+            }, {passive: true});
         });
 
-        closeBtn.addEventListener('click', () => {
+        chatBubble.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            chatWindow.classList.add('active');
+            setTimeout(() => userInput.focus(), 300);
+        });
+
+        chatBubble.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            chatWindow.classList.add('active');
+        });
+
+        closeBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            chatWindow.classList.remove('active');
+        });
+
+        closeBtn.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
             chatWindow.classList.remove('active');
         });
 
@@ -593,11 +642,26 @@
         }
 
         sendBtn.addEventListener('click', sendMessage);
+        sendBtn.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            sendMessage();
+        });
+
         userInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
+                e.preventDefault();
                 sendMessage();
             }
         });
+
+        // Mobile keyboard handling
+        if ('ontouchstart' in window) {
+            userInput.addEventListener('focus', () => {
+                setTimeout(() => {
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                }, 300);
+            });
+        }
     </script>
 </body>
 </html>
