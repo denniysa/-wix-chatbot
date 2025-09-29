@@ -493,7 +493,7 @@
                     </svg>
                 </div>
                 <div class="message bot-message">
-                    Hi, I'm Claude! How can I help you learn about AIFrontDesk.io?
+                    How can I assist you today?
                 </div>
             </div>
         </div>
@@ -536,7 +536,6 @@
         const chatMessages = document.getElementById('chatMessages');
         const typingWrapper = document.getElementById('typingWrapper');
 
-        // Prevent default touch behavior on interactive elements
         [chatBubble, closeBtn, sendBtn].forEach(el => {
             el.addEventListener('touchstart', (e) => {
                 e.stopPropagation();
@@ -654,7 +653,6 @@
             }
         });
 
-        // Mobile keyboard handling
         if ('ontouchstart' in window) {
             userInput.addEventListener('focus', () => {
                 setTimeout(() => {
