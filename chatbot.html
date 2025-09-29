@@ -19,10 +19,70 @@
             touch-action: manipulation;
         }
 
-        .chat-bubble {
+        .chat-bubble-container {
             position: fixed;
             bottom: 20px;
             right: 20px;
+            z-index: 999999;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 12px;
+        }
+
+        .greeting-message {
+            background: linear-gradient(135deg, rgba(26, 11, 46, 0.98) 0%, rgba(45, 27, 105, 0.95) 100%);
+            color: white;
+            padding: 12px 18px;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(107, 70, 193, 0.4), 
+                        0 0 40px rgba(212, 175, 55, 0.2);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            font-size: 14px;
+            font-weight: 500;
+            white-space: nowrap;
+            animation: greetingFloat 3s ease-in-out infinite, greetingAppear 0.5s ease-out;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .greeting-message::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            right: 20px;
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 8px solid rgba(45, 27, 105, 0.95);
+        }
+
+        .greeting-message.hidden {
+            display: none;
+        }
+
+        @keyframes greetingAppear {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes greetingFloat {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-8px);
+            }
+        }
+
+        .chat-bubble {
             width: 60px;
             height: 60px;
             background: #000;
@@ -37,10 +97,10 @@
                         0 0 60px rgba(212, 175, 55, 0.2),
                         inset 0 1px 0 rgba(255, 255, 255, 0.1);
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            z-index: 999999;
             -webkit-tap-highlight-color: transparent;
             touch-action: manipulation;
             overflow: hidden;
+            position: relative;
         }
 
         .chat-bubble::before {
@@ -424,9 +484,12 @@
         }
 
         @media (max-width: 768px) {
-            .chat-bubble {
+            .chat-bubble-container {
                 bottom: 15px;
                 right: 15px;
+            }
+
+            .chat-bubble {
                 width: 56px;
                 height: 56px;
             }
@@ -434,6 +497,13 @@
             .chat-bubble-icon {
                 width: 50px;
                 height: 50px;
+            }
+
+            .greeting-message {
+                font-size: 13px;
+                padding: 10px 16px;
+                max-width: calc(100vw - 100px);
+                white-space: normal;
             }
 
             .chat-window {
@@ -486,8 +556,13 @@
 </head>
 <body>
 
-    <div class="chat-bubble" id="chatBubble">
-        <div class="chat-bubble-icon"></div>
+    <div class="chat-bubble-container">
+        <div class="greeting-message" id="greetingMessage">
+            👋 Need help? Chat with us!
+        </div>
+        <div class="chat-bubble" id="chatBubble">
+            <div class="chat-bubble-icon"></div>
+        </div>
     </div>
 
     <div class="chat-window" id="chatWindow">
@@ -542,9 +617,22 @@
         const sendBtn = document.getElementById('sendBtn');
         const chatMessages = document.getElementById('chatMessages');
         const typingWrapper = document.getElementById('typingWrapper');
+        const greetingMessage = document.getElementById('greetingMessage');
 
-        // Your custom icon - using relative path since it's in the same folder
+        // Your custom icon
         const customIconUrl = 'chatbot-icon.png.jpg';
+
+        // Hide greeting message after 10 seconds
+        setTimeout(() => {
+            greetingMessage.classList.add('hidden');
+        }, 10000);
+
+        // Also hide greeting when clicked
+        greetingMessage.addEventListener('click', () => {
+            greetingMessage.classList.add('hidden');
+            chatWindow.classList.add('active');
+            setTimeout(() => userInput.focus(), 300);
+        });
 
         [chatBubble, closeBtn, sendBtn].forEach(el => {
             el.addEventListener('touchstart', (e) => {
@@ -555,6 +643,7 @@
         chatBubble.addEventListener('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
+            greetingMessage.classList.add('hidden');
             chatWindow.classList.add('active');
             setTimeout(() => userInput.focus(), 300);
         });
@@ -562,6 +651,7 @@
         chatBubble.addEventListener('touchend', (e) => {
             e.preventDefault();
             e.stopPropagation();
+            greetingMessage.classList.add('hidden');
             chatWindow.classList.add('active');
         });
 
