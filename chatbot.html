@@ -28,12 +28,6 @@
             flex-direction: column;
             align-items: flex-end;
             gap: 12px;
-            transition: opacity 0.3s ease;
-        }
-
-        .chat-bubble-container.chat-open {
-            opacity: 0;
-            pointer-events: none;
         }
 
         .greeting-message {
@@ -493,6 +487,12 @@
             .chat-bubble-container {
                 bottom: 15px;
                 right: 15px;
+                transition: opacity 0.3s ease;
+            }
+
+            .chat-bubble-container.chat-open {
+                opacity: 0;
+                pointer-events: none;
             }
 
             .chat-bubble {
@@ -629,6 +629,9 @@
         // Your custom icon
         const customIconUrl = 'chatbot-icon.png.jpg';
 
+        // Check if mobile
+        const isMobile = window.innerWidth <= 768;
+
         // Hide greeting message after 1 minute (60 seconds)
         setTimeout(() => {
             greetingMessage.classList.add('hidden');
@@ -637,7 +640,9 @@
         // Also hide greeting when clicked
         greetingMessage.addEventListener('click', () => {
             greetingMessage.classList.add('hidden');
-            chatBubbleContainer.classList.add('chat-open');
+            if (isMobile) {
+                chatBubbleContainer.classList.add('chat-open');
+            }
             chatWindow.classList.add('active');
             setTimeout(() => userInput.focus(), 300);
         });
@@ -652,7 +657,9 @@
             e.preventDefault();
             e.stopPropagation();
             greetingMessage.classList.add('hidden');
-            chatBubbleContainer.classList.add('chat-open');
+            if (isMobile || window.innerWidth <= 768) {
+                chatBubbleContainer.classList.add('chat-open');
+            }
             chatWindow.classList.add('active');
             setTimeout(() => userInput.focus(), 300);
         });
@@ -661,7 +668,9 @@
             e.preventDefault();
             e.stopPropagation();
             greetingMessage.classList.add('hidden');
-            chatBubbleContainer.classList.add('chat-open');
+            if (window.innerWidth <= 768) {
+                chatBubbleContainer.classList.add('chat-open');
+            }
             chatWindow.classList.add('active');
         });
 
@@ -669,14 +678,18 @@
             e.preventDefault();
             e.stopPropagation();
             chatWindow.classList.remove('active');
-            chatBubbleContainer.classList.remove('chat-open');
+            if (window.innerWidth <= 768) {
+                chatBubbleContainer.classList.remove('chat-open');
+            }
         });
 
         closeBtn.addEventListener('touchend', (e) => {
             e.preventDefault();
             e.stopPropagation();
             chatWindow.classList.remove('active');
-            chatBubbleContainer.classList.remove('chat-open');
+            if (window.innerWidth <= 768) {
+                chatBubbleContainer.classList.remove('chat-open');
+            }
         });
 
         function addMessage(text, isUser) {
