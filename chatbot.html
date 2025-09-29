@@ -483,6 +483,7 @@
             cursor: not-allowed;
         }
 
+        /* Mobile-specific styles - hide bubble when chat is open ONLY on mobile */
         @media (max-width: 768px) {
             .chat-bubble-container {
                 bottom: 15px;
@@ -490,7 +491,7 @@
                 transition: opacity 0.3s ease;
             }
 
-            .chat-bubble-container.chat-open {
+            .chat-bubble-container.mobile-chat-open {
                 opacity: 0;
                 pointer-events: none;
             }
@@ -629,19 +630,21 @@
         // Your custom icon
         const customIconUrl = 'chatbot-icon.png.jpg';
 
-        // Check if mobile
-        const isMobile = window.innerWidth <= 768;
-
         // Hide greeting message after 1 minute (60 seconds)
         setTimeout(() => {
             greetingMessage.classList.add('hidden');
         }, 60000);
 
+        // Function to check if mobile
+        function isMobileDevice() {
+            return window.innerWidth <= 768;
+        }
+
         // Also hide greeting when clicked
         greetingMessage.addEventListener('click', () => {
             greetingMessage.classList.add('hidden');
-            if (isMobile) {
-                chatBubbleContainer.classList.add('chat-open');
+            if (isMobileDevice()) {
+                chatBubbleContainer.classList.add('mobile-chat-open');
             }
             chatWindow.classList.add('active');
             setTimeout(() => userInput.focus(), 300);
@@ -657,8 +660,8 @@
             e.preventDefault();
             e.stopPropagation();
             greetingMessage.classList.add('hidden');
-            if (isMobile || window.innerWidth <= 768) {
-                chatBubbleContainer.classList.add('chat-open');
+            if (isMobileDevice()) {
+                chatBubbleContainer.classList.add('mobile-chat-open');
             }
             chatWindow.classList.add('active');
             setTimeout(() => userInput.focus(), 300);
@@ -668,8 +671,8 @@
             e.preventDefault();
             e.stopPropagation();
             greetingMessage.classList.add('hidden');
-            if (window.innerWidth <= 768) {
-                chatBubbleContainer.classList.add('chat-open');
+            if (isMobileDevice()) {
+                chatBubbleContainer.classList.add('mobile-chat-open');
             }
             chatWindow.classList.add('active');
         });
@@ -678,8 +681,8 @@
             e.preventDefault();
             e.stopPropagation();
             chatWindow.classList.remove('active');
-            if (window.innerWidth <= 768) {
-                chatBubbleContainer.classList.remove('chat-open');
+            if (isMobileDevice()) {
+                chatBubbleContainer.classList.remove('mobile-chat-open');
             }
         });
 
@@ -687,8 +690,8 @@
             e.preventDefault();
             e.stopPropagation();
             chatWindow.classList.remove('active');
-            if (window.innerWidth <= 768) {
-                chatBubbleContainer.classList.remove('chat-open');
+            if (isMobileDevice()) {
+                chatBubbleContainer.classList.remove('mobile-chat-open');
             }
         });
 
