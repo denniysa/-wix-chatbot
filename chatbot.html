@@ -17,103 +17,143 @@
 
         .chat-bubble {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            bottom: 24px;
+            right: 24px;
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, #1a0b2e 0%, #2d1b69 50%, #6b46c1 100%);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
-            transition: transform 0.3s;
+            box-shadow: 0 8px 32px rgba(107, 70, 193, 0.4), 0 0 0 0 rgba(107, 70, 193, 0.7);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             z-index: 999999;
-            touch-action: manipulation;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                box-shadow: 0 8px 32px rgba(107, 70, 193, 0.4), 0 0 0 0 rgba(107, 70, 193, 0.7);
+            }
+            50% {
+                box-shadow: 0 8px 32px rgba(107, 70, 193, 0.4), 0 0 0 20px rgba(107, 70, 193, 0);
+            }
         }
 
         .chat-bubble:hover {
             transform: scale(1.1);
+            box-shadow: 0 12px 40px rgba(107, 70, 193, 0.6);
         }
 
         .chat-bubble svg {
-            width: 28px;
-            height: 28px;
+            width: 32px;
+            height: 32px;
             fill: white;
         }
 
         .chat-window {
             position: fixed;
-            bottom: 90px;
-            right: 20px;
-            width: 380px;
-            height: 550px;
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            bottom: 100px;
+            right: 24px;
+            width: 400px;
+            height: 600px;
+            background: linear-gradient(145deg, #0f0524 0%, #1a0b2e 100%);
+            border-radius: 24px;
+            border: 1px solid rgba(107, 70, 193, 0.3);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(107, 70, 193, 0.2);
             display: none;
             flex-direction: column;
             z-index: 999998;
             overflow: hidden;
+            backdrop-filter: blur(10px);
         }
 
         .chat-window.active {
             display: flex;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .chat-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1a0b2e 0%, #2d1b69 50%, #6b46c1 100%);
             color: white;
-            padding: 20px;
+            padding: 24px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            border-bottom: 1px solid rgba(107, 70, 193, 0.3);
         }
 
         .chat-header h3 {
             font-size: 18px;
             font-weight: 600;
+            letter-spacing: 0.5px;
         }
 
         .close-btn {
-            background: rgba(255,255,255,0.2);
-            border: none;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             color: white;
-            width: 32px;
-            height: 32px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
             cursor: pointer;
             font-size: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: background 0.3s;
-            touch-action: manipulation;
+            transition: all 0.3s;
         }
 
         .close-btn:hover {
-            background: rgba(255,255,255,0.3);
+            background: rgba(255, 255, 255, 0.2);
+            transform: rotate(90deg);
         }
 
         .chat-messages {
             flex: 1;
-            padding: 20px;
+            padding: 24px;
             overflow-y: auto;
-            background: #f8f9fa;
+            background: #0a0318;
             -webkit-overflow-scrolling: touch;
         }
 
-        .message {
-            margin-bottom: 16px;
-            padding: 12px 16px;
-            border-radius: 18px;
-            max-width: 80%;
-            word-wrap: break-word;
-            animation: slideIn 0.3s ease;
+        .chat-messages::-webkit-scrollbar {
+            width: 6px;
         }
 
-        @keyframes slideIn {
+        .chat-messages::-webkit-scrollbar-track {
+            background: rgba(107, 70, 193, 0.1);
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: rgba(107, 70, 193, 0.3);
+            border-radius: 3px;
+        }
+
+        .message {
+            margin-bottom: 20px;
+            padding: 14px 18px;
+            border-radius: 16px;
+            max-width: 85%;
+            word-wrap: break-word;
+            animation: messageSlide 0.3s ease-out;
+            line-height: 1.5;
+        }
+
+        @keyframes messageSlide {
             from {
                 opacity: 0;
                 transform: translateY(10px);
@@ -125,69 +165,83 @@
         }
 
         .bot-message {
-            background: #e9ecef;
-            color: #333;
+            background: linear-gradient(135deg, #1a0b2e 0%, #2d1b69 100%);
+            color: #e0d4f7;
+            border: 1px solid rgba(107, 70, 193, 0.3);
+            box-shadow: 0 4px 12px rgba(107, 70, 193, 0.2);
         }
 
         .user-message {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #6b46c1 0%, #8b5cf6 100%);
             color: white;
             margin-left: auto;
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
         }
 
         .chat-input-area {
-            padding: 16px;
-            background: white;
-            border-top: 1px solid #e9ecef;
+            padding: 20px;
+            background: linear-gradient(145deg, #0f0524 0%, #1a0b2e 100%);
+            border-top: 1px solid rgba(107, 70, 193, 0.3);
         }
 
         .chat-input-container {
             display: flex;
-            gap: 10px;
+            gap: 12px;
+            align-items: center;
         }
 
         .chat-input {
             flex: 1;
-            padding: 12px 16px;
-            border: 2px solid #e9ecef;
+            padding: 14px 18px;
+            border: 1px solid rgba(107, 70, 193, 0.4);
             border-radius: 24px;
-            font-size: 16px;
+            font-size: 15px;
             outline: none;
-            transition: border-color 0.3s;
+            transition: all 0.3s;
+            background: rgba(26, 11, 46, 0.6);
+            color: white;
+        }
+
+        .chat-input::placeholder {
+            color: rgba(224, 212, 247, 0.5);
         }
 
         .chat-input:focus {
-            border-color: #667eea;
+            border-color: #8b5cf6;
+            background: rgba(26, 11, 46, 0.8);
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
         }
 
         .send-btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #6b46c1 0%, #8b5cf6 100%);
             color: white;
             border: none;
-            padding: 12px 24px;
+            padding: 14px 24px;
             border-radius: 24px;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 15px;
             font-weight: 600;
-            transition: opacity 0.3s;
-            touch-action: manipulation;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
         }
 
         .send-btn:hover {
-            opacity: 0.9;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
         }
 
         .send-btn:disabled {
-            opacity: 0.6;
+            opacity: 0.5;
             cursor: not-allowed;
+            transform: none;
         }
 
         @media (max-width: 768px) {
             .chat-bubble {
-                bottom: 15px;
-                right: 15px;
-                width: 56px;
-                height: 56px;
+                bottom: 20px;
+                right: 20px;
+                width: 60px;
+                height: 60px;
             }
 
             .chat-window {
@@ -202,19 +256,15 @@
             }
 
             .chat-header {
-                padding: 16px;
+                padding: 20px;
             }
 
             .chat-messages {
-                padding: 16px;
+                padding: 20px;
             }
 
             .chat-input-area {
-                padding: 12px;
-            }
-
-            .chat-input {
-                font-size: 16px;
+                padding: 16px;
             }
         }
     </style>
@@ -235,7 +285,7 @@
         
         <div class="chat-messages" id="chatMessages">
             <div class="message bot-message">
-                Hi! I'm your AI assistant. How can I help you today?
+                Hey there! How can I help you today?
             </div>
         </div>
         
@@ -245,7 +295,7 @@
                     type="text" 
                     class="chat-input" 
                     id="userInput" 
-                    placeholder="Type your message..."
+                    placeholder="Ask me anything..."
                     autocomplete="off"
                 >
                 <button class="send-btn" id="sendBtn">Send</button>
@@ -293,12 +343,12 @@
                 const data = await response.json();
                 
                 if (data.error) {
-                    return 'Sorry, something went wrong: ' + data.error;
+                    return 'Sorry, something went wrong. Mind trying again?';
                 }
                 
                 return data.reply;
             } catch (error) {
-                return 'Sorry, something went wrong. Please try again.';
+                return 'Hmm, I seem to be having connection issues. Can you try that again?';
             }
         }
 
@@ -310,7 +360,7 @@
             userInput.value = '';
 
             sendBtn.disabled = true;
-            sendBtn.textContent = 'Thinking...';
+            sendBtn.textContent = '...';
 
             const reply = await getAIResponse(text);
             addMessage(reply, false);
