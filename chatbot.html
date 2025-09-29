@@ -28,6 +28,12 @@
             flex-direction: column;
             align-items: flex-end;
             gap: 12px;
+            transition: opacity 0.3s ease;
+        }
+
+        .chat-bubble-container.chat-open {
+            opacity: 0;
+            pointer-events: none;
         }
 
         .greeting-message {
@@ -556,7 +562,7 @@
 </head>
 <body>
 
-    <div class="chat-bubble-container">
+    <div class="chat-bubble-container" id="chatBubbleContainer">
         <div class="greeting-message" id="greetingMessage">
             👋 Need help? Chat with us!
         </div>
@@ -611,6 +617,7 @@
 
     <script>
         const chatBubble = document.getElementById('chatBubble');
+        const chatBubbleContainer = document.getElementById('chatBubbleContainer');
         const chatWindow = document.getElementById('chatWindow');
         const closeBtn = document.getElementById('closeBtn');
         const userInput = document.getElementById('userInput');
@@ -630,6 +637,7 @@
         // Also hide greeting when clicked
         greetingMessage.addEventListener('click', () => {
             greetingMessage.classList.add('hidden');
+            chatBubbleContainer.classList.add('chat-open');
             chatWindow.classList.add('active');
             setTimeout(() => userInput.focus(), 300);
         });
@@ -644,6 +652,7 @@
             e.preventDefault();
             e.stopPropagation();
             greetingMessage.classList.add('hidden');
+            chatBubbleContainer.classList.add('chat-open');
             chatWindow.classList.add('active');
             setTimeout(() => userInput.focus(), 300);
         });
@@ -652,6 +661,7 @@
             e.preventDefault();
             e.stopPropagation();
             greetingMessage.classList.add('hidden');
+            chatBubbleContainer.classList.add('chat-open');
             chatWindow.classList.add('active');
         });
 
@@ -659,12 +669,14 @@
             e.preventDefault();
             e.stopPropagation();
             chatWindow.classList.remove('active');
+            chatBubbleContainer.classList.remove('chat-open');
         });
 
         closeBtn.addEventListener('touchend', (e) => {
             e.preventDefault();
             e.stopPropagation();
             chatWindow.classList.remove('active');
+            chatBubbleContainer.classList.remove('chat-open');
         });
 
         function addMessage(text, isUser) {
