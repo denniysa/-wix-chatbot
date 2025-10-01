@@ -15,6 +15,12 @@
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             overflow: hidden;
             touch-action: manipulation;
+            pointer-events: none;
+        }
+
+        .chat-bubble-container,
+        .chat-window {
+            pointer-events: auto;
         }
 
         .chat-bubble-container {
@@ -616,22 +622,8 @@
         }
 
         greetingMessage.addEventListener('click', openChat);
-        greetingMessage.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            openChat();
-        });
-
         chatBubble.addEventListener('click', openChat);
-        chatBubble.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            openChat();
-        });
-
         closeBtn.addEventListener('click', closeChat);
-        closeBtn.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            closeChat();
-        });
 
         function addMessage(text, isUser) {
             const wrapper = document.createElement('div');
@@ -699,10 +691,6 @@
         }
 
         sendBtn.addEventListener('click', sendMessage);
-        sendBtn.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            sendMessage();
-        });
 
         userInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
